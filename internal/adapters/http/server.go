@@ -18,7 +18,7 @@ func (s *Server) createHandler() *chi.Mux {
 	r := chi.NewMux()
 
 	r.Route("/debug", func(r chi.Router) {
-		r.Get("/healthz", s.healthCheckHandler)
+		r.Get("/healthz", s.healthCheck)
 	})
 
 	return r
