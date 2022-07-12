@@ -23,6 +23,14 @@ func (s *Server) createHandler(middlewares ...func(http.Handler) http.Handler) *
 		r.Get("/healthz", s.healthCheck)
 	})
 
+	r.Route("/api", func(r chi.Router) {
+		r.Route("/tasks", func(r chi.Router) {
+			r.Get("/num-agreed", s.getNumAgreedTasks)
+			r.Get("/num-rejected", s.getNumRejectedTasks)
+			r.Get("/total-time", s.getTotalTime)
+		})
+	})
+
 	return r
 }
 
