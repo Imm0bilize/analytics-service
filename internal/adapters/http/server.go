@@ -14,8 +14,10 @@ type Server struct {
 	server *http.Server
 }
 
-func (s *Server) createHandler() *chi.Mux {
+func (s *Server) createHandler(middlewares ...func(http.Handler) http.Handler) *chi.Mux {
 	r := chi.NewMux()
+
+	r.Use(middlewares...)
 
 	r.Route("/debug", func(r chi.Router) {
 		r.Get("/healthz", s.healthCheck)
@@ -24,13 +26,13 @@ func (s *Server) createHandler() *chi.Mux {
 	return r
 }
 
-func New(port string, readTimeout, writeTimeout time.Duration) *Server {
+func New(port string, readTimeout, writeTimeout time.Duration, middlewares ...func(http.Handler) http.Handler) *Server {
 	s := &Server{
 		notify: make(chan error, 1),
 	}
 
 	server := &http.Server{
-		Handler:      s.createHandler(),
+		Handler:      s.createHandler(middlewares...),
 		Addr:         net.JoinHostPort("", port),
 		ReadTimeout:  readTimeout,
 		WriteTimeout: writeTimeout,
