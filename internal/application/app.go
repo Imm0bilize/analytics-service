@@ -2,6 +2,7 @@ package application
 
 import (
 	restServer "analytic-service/internal/adapters/http"
+	"analytic-service/pkg/logging"
 	"log"
 	"os"
 	"os/signal"
@@ -10,7 +11,13 @@ import (
 )
 
 func Run() {
-	httpServer := restServer.New("8080", time.Second*10, time.Second*10)
+
+	logger, err := logging.New("DEBUG", time.RFC3339)
+	if err != nil {
+		log.Fatal("fatal")
+	}
+
+	httpServer := restServer.New("8080", time.Second*10, time.Second*10, logger.MiddlewareLogging)
 	httpServer.Run()
 
 	interrupt := make(chan os.Signal, 1)
