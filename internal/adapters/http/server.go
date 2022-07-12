@@ -1,12 +1,12 @@
 package http
 
 import (
+	"analytic-service/internal/config"
 	"context"
 	"errors"
 	"github.com/go-chi/chi/v5"
 	"net"
 	"net/http"
-	"time"
 )
 
 type Server struct {
@@ -34,16 +34,16 @@ func (s *Server) createHandler(middlewares ...func(http.Handler) http.Handler) *
 	return r
 }
 
-func New(port string, readTimeout, writeTimeout time.Duration, middlewares ...func(http.Handler) http.Handler) *Server {
+func New(cfg *config.Config, middlewares ...func(http.Handler) http.Handler) *Server {
 	s := &Server{
 		notify: make(chan error, 1),
 	}
 
 	server := &http.Server{
 		Handler:      s.createHandler(middlewares...),
-		Addr:         net.JoinHostPort("", port),
-		ReadTimeout:  readTimeout,
-		WriteTimeout: writeTimeout,
+		Addr:         net.JoinHostPort("", cfg.Http.Port),
+		ReadTimeout:  cfg.Http.ReadTimeout,
+		WriteTimeout: cfg.Http.WriteTimeout,
 	}
 	s.server = server
 
