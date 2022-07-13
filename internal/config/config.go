@@ -27,9 +27,15 @@ type loggerCgf struct {
 	TsFormat string `yaml:"ts_format"`
 }
 
+type authCfg struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
+}
+
 type Config struct {
 	Http      httpCfg   `yaml:"http"`
 	Logger    loggerCgf `yaml:"logger"`
+	Auth      authCfg   `yaml:"auth_service"`
 	AppParams appCfg    `yaml:"application_params"`
 }
 

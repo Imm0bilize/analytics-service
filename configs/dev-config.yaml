@@ -5,5 +5,8 @@ http:
 logger:
   level: "DEBUG"
   ts_format: "2006-01-02T15:04:05Z07:00"  # RFC3339
+auth_service:
+  host: "127.0.0.1"
+  port: "3000"
 application_params:
   shutdown_timeout: "10s"

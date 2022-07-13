@@ -14,7 +14,7 @@ type Server struct {
 	server *http.Server
 }
 
-func (s *Server) createHandler(middlewares ...func(http.Handler) http.Handler) *chi.Mux {
+func (s *Server) createHandler(auth func(http.Handler) http.Handler, middlewares ...func(http.Handler) http.Handler) *chi.Mux {
 	r := chi.NewMux()
 
 	r.Use(middlewares...)
@@ -24,6 +24,7 @@ func (s *Server) createHandler(middlewares ...func(http.Handler) http.Handler) *
 	})
 
 	r.Route("/api", func(r chi.Router) {
+		r.Use(auth)
 		r.Route("/tasks", func(r chi.Router) {
 			r.Get("/num-agreed", s.getNumAgreedTasks)
 			r.Get("/num-rejected", s.getNumRejectedTasks)
@@ -34,13 +35,14 @@ func (s *Server) createHandler(middlewares ...func(http.Handler) http.Handler) *
 	return r
 }
 
-func New(cfg *config.Config, middlewares ...func(http.Handler) http.Handler) *Server {
+func New(
+	cfg *config.Config, auth func(http.Handler) http.Handler, middlewares ...func(http.Handler) http.Handler) *Server {
 	s := &Server{
 		notify: make(chan error, 1),
 	}
 
 	server := &http.Server{
-		Handler:      s.createHandler(middlewares...),
+		Handler:      s.createHandler(auth, middlewares...),
 		Addr:         net.JoinHostPort("", cfg.Http.Port),
 		ReadTimeout:  cfg.Http.ReadTimeout,
 		WriteTimeout: cfg.Http.WriteTimeout,
