@@ -2,7 +2,7 @@ package auth
 
 import "net/http"
 
-func (g *GrpcAuth) validateToken(next http.Handler) http.Handler {
+func (g *GrpcAuth) ValidateToken(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		accessToken, err := r.Cookie("access_token")
 		if err != nil {
@@ -24,5 +24,11 @@ func (g *GrpcAuth) validateToken(next http.Handler) http.Handler {
 			http.SetCookie(w, &http.Cookie{Name: "refresh_token", Value: newRefToken, Path: "/"})
 			next.ServeHTTP(w, r)
 		}
+	})
+}
+
+func (g *GrpcAuth) ValidateTokenStub(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		next.ServeHTTP(w, r)
 	})
 }
