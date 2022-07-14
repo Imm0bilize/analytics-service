@@ -23,7 +23,7 @@ type db struct {
 
 func New(cfg *config.Config) (*db, error) {
 	dbCfg, err := pgx.ParseConfig(
-		fmt.Sprintf("postrgresql://%s:%s@%s:%s/app?sslmode=disable", cfg.Db.User, cfg.Db.Password, cfg.Db.Host, cfg.Db.Port),
+		fmt.Sprintf("postgresql://%s:%s@%s:%s/postgres?sslmode=disable", cfg.Db.User, cfg.Db.Password, cfg.Db.Host, cfg.Db.Port),
 	)
 
 	if err != nil {
