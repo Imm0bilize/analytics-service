@@ -32,10 +32,18 @@ type authCfg struct {
 	Port string `yaml:"port"`
 }
 
+type dbCfg struct {
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	User     string `env:"DB_POSTGRES_USER"`
+	Password string `env:"DB_POSTGRES_PASSWORD"`
+}
+
 type Config struct {
 	Http      httpCfg   `yaml:"http"`
 	Logger    loggerCgf `yaml:"logger"`
 	Auth      authCfg   `yaml:"auth_service"`
+	Db        dbCfg     `yaml:"database"`
 	AppParams appCfg    `yaml:"application_params"`
 }
 
