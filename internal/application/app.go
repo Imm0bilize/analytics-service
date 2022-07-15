@@ -4,6 +4,7 @@ import (
 	"analytic-service/internal/adapters/database/postrgre"
 	v1 "analytic-service/internal/adapters/http/v1"
 	"analytic-service/internal/config"
+	"analytic-service/internal/domain/service"
 	"analytic-service/pkg/auth"
 	"analytic-service/pkg/httpServer"
 	"analytic-service/pkg/logging"
@@ -20,20 +21,27 @@ func Run(cfg *config.Config) {
 		log.Fatal(err)
 	}
 
-	// RestAPI
+	// ValidateToken
 	authService, err := auth.New(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Database
 	db, err := postrgre.New(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	handler := v1.CreateHandler(authService.ValidateTokenStub, logger.MiddlewareLogging)
-	restServer := httpServer.New(cfg, handler)
+	domainService := service.New(db, logger)
+
+	handler := v1.CreateHandler(domainService)
+
+	// Rest
+	restServer := httpServer.New(cfg, handler.GetHttpHandler(authService.ValidateTokenStub, logger.MiddlewareLogging))
 	restServer.Run()
+
+	// grpc/broker
 
 	// Shutdown
 	interrupt := make(chan os.Signal, 1)
