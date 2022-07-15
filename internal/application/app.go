@@ -3,6 +3,7 @@ package application
 import (
 	"analytic-service/internal/adapters/database/postrgre"
 	v1 "analytic-service/internal/adapters/http/v1"
+	"analytic-service/internal/adapters/rpc"
 	"analytic-service/internal/config"
 	"analytic-service/internal/domain/service"
 	"analytic-service/pkg/auth"
@@ -18,7 +19,7 @@ import (
 func Run(cfg *config.Config) {
 	logger, err := logging.New(cfg.Logger.Level, cfg.Logger.TsFormat)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("error when creating logger: %s", err.Error())
 	}
 
 	// ValidateToken
@@ -30,7 +31,7 @@ func Run(cfg *config.Config) {
 	// Database
 	db, err := postrgre.New(cfg)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("error when creating connection to auth service: %s", err.Error())
 	}
 
 	domainService := service.New(db, logger)
@@ -42,6 +43,11 @@ func Run(cfg *config.Config) {
 	restServer.Run()
 
 	// grpc/broker
+	grpcServer, err := rpc.New(cfg, domainService)
+	if err != nil {
+		log.Fatalf("error when creating grpc server: %s", err.Error())
+	}
+	grpcServer.Run()
 
 	// Shutdown
 	interrupt := make(chan os.Signal, 1)
@@ -52,6 +58,8 @@ func Run(cfg *config.Config) {
 		log.Print("an interrupt signal was received " + s.String())
 	case err = <-restServer.Notify():
 		log.Fatalf("httpServer.Notify: %s", err.Error())
+	case err = <-grpcServer.Notify():
+		log.Fatalf("grpcServer.Notify: %s", err.Error())
 	}
 
 	ctx, cancelFn := context.WithTimeout(
@@ -67,6 +75,9 @@ func Run(cfg *config.Config) {
 		logger.ErrorF("error during shutdown DB: %v", err)
 	}
 	if err := authService.Shutdown(); err != nil {
+		logger.Error("error while close connection with auth service")
+	}
+	if err := grpcServer.Shutdown(); err != nil {
 		logger.Error("error while close connection with auth service")
 	}
 
