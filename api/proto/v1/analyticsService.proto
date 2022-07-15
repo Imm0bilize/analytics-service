@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package interpretedProto;
+option go_package = ".pkg/interpretedProto/v1";
+
+import "google/protobuf/empty.proto";
+
+
+service Analytics{
+  rpc CreateTask(NewTask) returns (google.protobuf.Empty);
+  rpc UpdateTasksState(NewTasksState) returns (google.protobuf.Empty);
+  rpc SetTimeStart(TimeStart) returns (google.protobuf.Empty);
+  rpc SetTimeEnd(TimeEnd) returns (google.protobuf.Empty);
+}
+
+
+message NewTask {
+  string id = 1;
+}
+
+message NewTasksState {
+  string id = 1;
+  string state = 2;
+}
+
+message UserTask{
+  string taskId = 1;
+  string login = 2;
+}
+
+message TimeStart{
+  UserTask user = 1;
+  string timeStart = 2;
+}
+
+message TimeEnd{
+  UserTask user = 1;
+  string timeEnd = 3;
+}
