@@ -1,11 +1,20 @@
 package v1
 
 import (
+	"analytic-service/internal/ports"
 	"github.com/go-chi/chi/v5"
 	"net/http"
 )
 
-func CreateHandler(auth func(http.Handler) http.Handler, middlewares ...func(http.Handler) http.Handler) *chi.Mux {
+type Handler struct {
+	domain ports.ClientDomain
+}
+
+func CreateHandler(domain ports.ClientDomain) *Handler {
+	return &Handler{domain: domain}
+}
+
+func (h *Handler) GetHttpHandler(auth func(http.Handler) http.Handler, middlewares ...func(http.Handler) http.Handler) *chi.Mux {
 	r := chi.NewMux()
 
 	r.Use(middlewares...)
@@ -17,9 +26,9 @@ func CreateHandler(auth func(http.Handler) http.Handler, middlewares ...func(htt
 	r.Route("/api", func(r chi.Router) {
 		r.Use(auth)
 		r.Route("/tasks", func(r chi.Router) {
-			r.Get("/num-agreed", getNumAgreedTasks)
-			r.Get("/num-rejected", getNumRejectedTasks)
-			r.Get("/total-time", getTotalTime)
+			r.Get("/num-agreed", h.getNumAgreedTasks)
+			r.Get("/num-rejected", h.getNumRejectedTasks)
+			r.Get("/total-time", h.getTotalTime)
 		})
 	})
 
