@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	taskStateAgreed     = "agreed"
+	taskStateAccepted   = "accepted"
 	taskStateRejected   = "rejected"
 	taskStateCreated    = "created"
 	taskStateProcessing = "processing"
@@ -46,7 +46,7 @@ func (d *db) Shutdown() error {
 
 func (d *db) getNumRecordsByState(ctx context.Context, state string) (int, error) {
 	var count int
-	err := d.instance.QueryRowContext(ctx, "select count(*) from tasks_app.tasks_state where state=$1", state).Scan(&count)
+	err := d.instance.QueryRowContext(ctx, "select count(*) from tasks_app.tasks_state where tasks_app.tasks_state.state=$1", state).Scan(&count)
 	if err != nil {
 		return 0, err
 	}
@@ -68,7 +68,7 @@ func (d *db) GetTotalTime(ctx context.Context) (string, error) {
 }
 
 func (d *db) GetNumAgreedTasks(ctx context.Context) (int, error) {
-	count, err := d.getNumRecordsByState(ctx, taskStateAgreed)
+	count, err := d.getNumRecordsByState(ctx, taskStateAccepted)
 	if err != nil {
 		return 0, database.ErrCreateQuery
 	}
