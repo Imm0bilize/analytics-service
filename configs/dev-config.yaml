@@ -11,5 +11,9 @@ auth_service:
 database:
   host: "localhost"
   port: "5432"
+grpc_server:
+  network: "tcp"
+  host: "127.0.0.1"
+  port: "3001"
 application_params:
   shutdown_timeout: "10s"

@@ -32,6 +32,12 @@ type authCfg struct {
 	Port string `yaml:"port"`
 }
 
+type grpcCfg struct {
+	Network string `yaml:"network"`
+	Host    string `yaml:"host"`
+	Port    string `yaml:"port"`
+}
+
 type dbCfg struct {
 	Host     string `yaml:"host"`
 	Port     string `yaml:"port"`
@@ -44,6 +50,7 @@ type Config struct {
 	Logger    loggerCgf `yaml:"logger"`
 	Auth      authCfg   `yaml:"auth_service"`
 	Db        dbCfg     `yaml:"database"`
+	Grpc      grpcCfg   `yaml:"grpc_server"`
 	AppParams appCfg    `yaml:"application_params"`
 }
 
