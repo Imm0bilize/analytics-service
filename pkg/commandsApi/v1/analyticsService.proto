@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package interpretedProto;
-option go_package = ".pkg/interpretedProto/v1";
+option go_package = ".pkg/commandsApi/v1";
 
 import "google/protobuf/empty.proto";
 

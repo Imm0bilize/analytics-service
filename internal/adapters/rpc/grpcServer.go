@@ -3,7 +3,7 @@ package rpc
 import (
 	"analytic-service/internal/config"
 	"analytic-service/internal/ports"
-	v1 "analytic-service/pkg/interpretedProto/v1"
+	v1 "analytic-service/pkg/commandsApi/v1"
 	"context"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
