@@ -1,7 +1,7 @@
 package service
 
 import (
-	"analytic-service/internal/domain/models/dto"
+	"analytic-service/internal/adapters/http/dto"
 	"context"
 )
 
