@@ -1,0 +1,155 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Service for collecting analytics about working with tasks from clients",
+        "title": "Analytics service",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/tasks/num-accepted": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "the handler allows you to get the total number of accepted tasks stored in the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "getting the number of accepted tasks",
+                "operationId": "get-num-accepted-tasks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.NumAgreedTasksDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "error during encoding to json",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tasks/num-rejected": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "the handler allows you to get the total number of rejected tasks stored in the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "getting the number of rejected tasks",
+                "operationId": "get-num-rejected-tasks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.NumRejectedTaskDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "error during encoding to json",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tasks/total-time": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "the handler allows you to get the total amount of time spent on confirmed or rejected tasks",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "getting the total time for all tasks",
+                "operationId": "get-total-time",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.TotalTimeDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "error during encoding to json",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/debug/healthz": {
+            "get": {
+                "description": "check service health",
+                "tags": [
+                    "debug"
+                ],
+                "operationId": "health-check",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.NumAgreedTasksDTO": {
+            "type": "object",
+            "properties": {
+                "num_agreed_tasks": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.NumRejectedTaskDTO": {
+            "type": "object",
+            "properties": {
+                "num_rejected_tasks": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.TotalTimeDTO": {
+            "type": "object",
+            "properties": {
+                "total_time": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
