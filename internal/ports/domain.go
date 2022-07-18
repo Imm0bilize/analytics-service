@@ -13,7 +13,6 @@ type ClientDomain interface {
 
 type ManagementServerDomain interface {
 	CreateTask(ctx context.Context, taskID string) error
-	UpdateTasksState(ctx context.Context, taskID string, state string) error
-	SetTimeStart(ctx context.Context, id string, login string, startTime string) error
-	SetTimeEnd(ctx context.Context, id string, login string, endTime string) error
+	SetTimeStart(ctx context.Context, id, login, startTime, newState string) error
+	SetTimeEnd(ctx context.Context, id, login, endTime, newState string) error
 }

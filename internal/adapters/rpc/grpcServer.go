@@ -38,22 +38,15 @@ func (s *GrpcServer) CreateTask(ctx context.Context, newTask *v1.NewTask) (*empt
 	return &emptypb.Empty{}, nil
 }
 
-func (s *GrpcServer) UpdateTasksState(ctx context.Context, newState *v1.NewTasksState) (*emptypb.Empty, error) {
-	if err := s.domain.UpdateTasksState(ctx, newState.Id, newState.State); err != nil {
-		return nil, err
-	}
-	return &emptypb.Empty{}, nil
-}
-
 func (s *GrpcServer) SetTimeStart(ctx context.Context, timeStart *v1.TimeStart) (*emptypb.Empty, error) {
-	if err := s.domain.SetTimeStart(ctx, timeStart.User.TaskId, timeStart.User.Login, timeStart.TimeStart); err != nil {
+	if err := s.domain.SetTimeStart(ctx, timeStart.User.TaskId, timeStart.User.Login, timeStart.TimeStart, *timeStart.NewTaskState); err != nil {
 		return nil, err
 	}
 	return &emptypb.Empty{}, nil
 }
 
 func (s *GrpcServer) SetTimeEnd(ctx context.Context, timeEnd *v1.TimeEnd) (*emptypb.Empty, error) {
-	if err := s.domain.SetTimeStart(ctx, timeEnd.User.TaskId, timeEnd.User.Login, timeEnd.TimeEnd); err != nil {
+	if err := s.domain.SetTimeEnd(ctx, timeEnd.User.TaskId, timeEnd.User.Login, timeEnd.TimeEnd, *timeEnd.NewTaskState); err != nil {
 		return nil, err
 	}
 	return &emptypb.Empty{}, nil
