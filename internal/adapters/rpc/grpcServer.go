@@ -12,12 +12,12 @@ import (
 
 type GrpcServer struct {
 	v1.UnimplementedAnalyticsServer
-	domain   ports.ManagementServerDomain
+	domain   ports.CommandDomain
 	notify   chan error
 	listener net.Listener
 }
 
-func New(cfg *config.Config, domain ports.ManagementServerDomain) (*GrpcServer, error) {
+func New(cfg *config.Config, domain ports.CommandDomain) (*GrpcServer, error) {
 	listener, err := net.Listen(cfg.Grpc.Network, net.JoinHostPort(cfg.Grpc.Host, cfg.Grpc.Port))
 	if err != nil {
 		return nil, err

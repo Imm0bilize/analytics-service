@@ -8,10 +8,10 @@ import (
 )
 
 type Handler struct {
-	domain ports.ClientDomain
+	domain ports.QueryDomain
 }
 
-func CreateHandler(domain ports.ClientDomain) *Handler {
+func CreateHandler(domain ports.QueryDomain) *Handler {
 	return &Handler{domain: domain}
 }
 
