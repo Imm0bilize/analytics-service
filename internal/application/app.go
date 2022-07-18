@@ -1,14 +1,15 @@
 package application
 
 import (
-	"analytic-service/internal/adapters/database/postrgre"
 	v1 "analytic-service/internal/adapters/http/v1"
+	"analytic-service/internal/adapters/repository"
 	"analytic-service/internal/adapters/rpc"
 	"analytic-service/internal/config"
 	"analytic-service/internal/domain/service"
 	"analytic-service/pkg/auth"
 	"analytic-service/pkg/httpServer"
 	"analytic-service/pkg/logging"
+	"analytic-service/pkg/postgre"
 	"context"
 	"log"
 	"os"
@@ -29,16 +30,16 @@ func Run(cfg *config.Config) {
 	}
 
 	// Database
-	db, err := postrgre.New(cfg)
+	pg, err := postgre.New(logger, cfg.Db.User, cfg.Db.Password, cfg.Db.Host, cfg.Db.Port, cfg.Db.NAttemptsToConnect)
 	if err != nil {
 		log.Fatalf("error when creating connection to auth service: %s", err.Error())
 	}
+	repo := repository.NewPgRepo(pg)
 
-	domainService := service.New(db, logger)
-
-	handler := v1.CreateHandler(domainService)
+	domainService := service.New(repo, logger)
 
 	// Rest
+	handler := v1.CreateHandler(domainService)
 	restServer := httpServer.New(cfg, handler.GetHttpHandler(authService.ValidateTokenStub, logger.MiddlewareLogging))
 	restServer.Run()
 
@@ -71,7 +72,7 @@ func Run(cfg *config.Config) {
 	if err := restServer.Shutdown(ctx); err != nil {
 		logger.ErrorF("error during shutdown httpServer: %v", err)
 	}
-	if err := db.Shutdown(); err != nil {
+	if err := pg.Shutdown(); err != nil {
 		logger.ErrorF("error during shutdown DB: %v", err)
 	}
 	if err := authService.Shutdown(); err != nil {

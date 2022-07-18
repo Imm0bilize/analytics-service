@@ -39,10 +39,11 @@ type grpcCfg struct {
 }
 
 type dbCfg struct {
-	Host     string `yaml:"host"`
-	Port     string `yaml:"port"`
-	User     string `env:"DB_POSTGRES_USER"`
-	Password string `env:"DB_POSTGRES_PASSWORD"`
+	Host               string `yaml:"host"`
+	Port               string `yaml:"port"`
+	User               string `env:"DB_POSTGRES_USER"`
+	Password           string `env:"DB_POSTGRES_PASSWORD"`
+	NAttemptsToConnect int    `yaml:"n_attempts_to_connect"`
 }
 
 type Config struct {

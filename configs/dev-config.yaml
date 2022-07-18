@@ -11,6 +11,7 @@ auth_service:
 database:
   host: "localhost"
   port: "5432"
+  n_attempts_to_connect: 3
 grpc_server:
   network: "tcp"
   host: "127.0.0.1"
