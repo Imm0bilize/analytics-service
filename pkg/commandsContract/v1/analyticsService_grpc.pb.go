@@ -38,7 +38,7 @@ func NewAnalyticsClient(cc grpc.ClientConnInterface) AnalyticsClient {
 
 func (c *analyticsClient) CreateTask(ctx context.Context, in *NewTask, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/commandsApi.Analytics/CreateTask", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/commandsContract.Analytics/CreateTask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func (c *analyticsClient) CreateTask(ctx context.Context, in *NewTask, opts ...g
 
 func (c *analyticsClient) SetTimeStart(ctx context.Context, in *TimeStart, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/commandsApi.Analytics/SetTimeStart", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/commandsContract.Analytics/SetTimeStart", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *analyticsClient) SetTimeStart(ctx context.Context, in *TimeStart, opts 
 
 func (c *analyticsClient) SetTimeEnd(ctx context.Context, in *TimeEnd, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/commandsApi.Analytics/SetTimeEnd", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/commandsContract.Analytics/SetTimeEnd", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func _Analytics_CreateTask_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/commandsApi.Analytics/CreateTask",
+		FullMethod: "/commandsContract.Analytics/CreateTask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AnalyticsServer).CreateTask(ctx, req.(*NewTask))
@@ -127,7 +127,7 @@ func _Analytics_SetTimeStart_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/commandsApi.Analytics/SetTimeStart",
+		FullMethod: "/commandsContract.Analytics/SetTimeStart",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AnalyticsServer).SetTimeStart(ctx, req.(*TimeStart))
@@ -145,7 +145,7 @@ func _Analytics_SetTimeEnd_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/commandsApi.Analytics/SetTimeEnd",
+		FullMethod: "/commandsContract.Analytics/SetTimeEnd",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AnalyticsServer).SetTimeEnd(ctx, req.(*TimeEnd))
@@ -157,7 +157,7 @@ func _Analytics_SetTimeEnd_Handler(srv interface{}, ctx context.Context, dec fun
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Analytics_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "commandsApi.Analytics",
+	ServiceName: "commandsContract.Analytics",
 	HandlerType: (*AnalyticsServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

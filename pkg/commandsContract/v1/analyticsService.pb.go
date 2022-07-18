@@ -313,21 +313,21 @@ func file_api_proto_v1_analyticsService_proto_rawDescGZIP() []byte {
 
 var file_api_proto_v1_analyticsService_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_api_proto_v1_analyticsService_proto_goTypes = []interface{}{
-	(*NewTask)(nil),       // 0: commandsApi.NewTask
-	(*UsersTask)(nil),     // 1: commandsApi.UsersTask
-	(*TimeStart)(nil),     // 2: commandsApi.TimeStart
-	(*TimeEnd)(nil),       // 3: commandsApi.TimeEnd
+	(*NewTask)(nil),       // 0: commandsContract.NewTask
+	(*UsersTask)(nil),     // 1: commandsContract.UsersTask
+	(*TimeStart)(nil),     // 2: commandsContract.TimeStart
+	(*TimeEnd)(nil),       // 3: commandsContract.TimeEnd
 	(*emptypb.Empty)(nil), // 4: google.protobuf.Empty
 }
 var file_api_proto_v1_analyticsService_proto_depIdxs = []int32{
-	1, // 0: commandsApi.TimeStart.user:type_name -> commandsApi.UsersTask
-	1, // 1: commandsApi.TimeEnd.user:type_name -> commandsApi.UsersTask
-	0, // 2: commandsApi.Analytics.CreateTask:input_type -> commandsApi.NewTask
-	2, // 3: commandsApi.Analytics.SetTimeStart:input_type -> commandsApi.TimeStart
-	3, // 4: commandsApi.Analytics.SetTimeEnd:input_type -> commandsApi.TimeEnd
-	4, // 5: commandsApi.Analytics.CreateTask:output_type -> google.protobuf.Empty
-	4, // 6: commandsApi.Analytics.SetTimeStart:output_type -> google.protobuf.Empty
-	4, // 7: commandsApi.Analytics.SetTimeEnd:output_type -> google.protobuf.Empty
+	1, // 0: commandsContract.TimeStart.user:type_name -> commandsContract.UsersTask
+	1, // 1: commandsContract.TimeEnd.user:type_name -> commandsContract.UsersTask
+	0, // 2: commandsContract.Analytics.CreateTask:input_type -> commandsContract.NewTask
+	2, // 3: commandsContract.Analytics.SetTimeStart:input_type -> commandsContract.TimeStart
+	3, // 4: commandsContract.Analytics.SetTimeEnd:input_type -> commandsContract.TimeEnd
+	4, // 5: commandsContract.Analytics.CreateTask:output_type -> google.protobuf.Empty
+	4, // 6: commandsContract.Analytics.SetTimeStart:output_type -> google.protobuf.Empty
+	4, // 7: commandsContract.Analytics.SetTimeEnd:output_type -> google.protobuf.Empty
 	5, // [5:8] is the sub-list for method output_type
 	2, // [2:5] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
