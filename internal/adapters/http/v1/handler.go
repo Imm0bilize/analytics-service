@@ -3,6 +3,7 @@ package v1
 import (
 	"analytic-service/internal/ports"
 	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"net/http"
 )
 
@@ -19,6 +20,8 @@ func (h *Handler) GetHttpHandler(auth func(http.Handler) http.Handler, middlewar
 
 	r.Use(middlewares...)
 
+	r.Get("/swagger/*", httpSwagger.WrapHandler)
+
 	r.Route("/debug", func(r chi.Router) {
 		r.Get("/healthz", healthCheck)
 	})
@@ -26,7 +29,7 @@ func (h *Handler) GetHttpHandler(auth func(http.Handler) http.Handler, middlewar
 	r.Route("/api", func(r chi.Router) {
 		r.Use(auth)
 		r.Route("/tasks", func(r chi.Router) {
-			r.Get("/num-agreed", h.getNumAgreedTasks)
+			r.Get("/num-accepted", h.getNumAcceptedTasks)
 			r.Get("/num-rejected", h.getNumRejectedTasks)
 			r.Get("/total-time", h.getTotalTime)
 		})
