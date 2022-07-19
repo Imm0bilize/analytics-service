@@ -70,16 +70,16 @@ func Run(cfg *config.Config) {
 	defer cancelFn()
 
 	if err := restServer.Shutdown(ctx); err != nil {
-		logger.ErrorF("error during shutdown httpServer: %v", err)
+		logger.Errorf("error during shutdown httpServer: %v", err)
 	}
 	if err := pg.Shutdown(); err != nil {
-		logger.ErrorF("error during shutdown DB: %v", err)
+		logger.Errorf("error during shutdown DB: %v", err)
 	}
 	if err := authService.Shutdown(); err != nil {
-		logger.Error("error while close connection with auth service")
+		logger.Errorf("error while close connection with auth service")
 	}
 	if err := grpcServer.Shutdown(); err != nil {
-		logger.Error("error while close connection with auth service")
+		logger.Errorf("error while close connection with auth service")
 	}
 
 }

@@ -1,11 +1,11 @@
 package postgre
 
 import (
-	"analytic-service/pkg/logging"
 	"database/sql"
 	"fmt"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/stdlib"
+	"github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -13,7 +13,7 @@ type DB struct {
 	Conn *sql.DB
 }
 
-func attemptPingDB(db *sql.DB, logger logging.ILogger, nAttempts int) error {
+func attemptPingDB(db *sql.DB, logger logrus.FieldLogger, nAttempts int) error {
 	if nAttempts <= 0 {
 		panic("the number of attempts to connect to the database must be a positive number")
 	}
@@ -25,14 +25,14 @@ func attemptPingDB(db *sql.DB, logger logging.ILogger, nAttempts int) error {
 		if err == nil {
 			return nil
 		}
-		logger.WarningF("failed to connect to the database, retry via %v", nAttempts)
+		logger.Warningf("failed to connect to the database, retry via %v", nAttempts)
 		time.Sleep(startDelayTime)
 		startDelayTime *= 2
 	}
 	return ErrConnectionToDb
 }
 
-func New(logger logging.ILogger, user, password, host, port string, nAttempts int) (*DB, error) {
+func New(logger logrus.FieldLogger, user, password, host, port string, nAttempts int) (*DB, error) {
 	cfg, err := pgx.ParseConfig(
 		fmt.Sprintf("postgresql://%s:%s@%s:%s/postgres?sslmode=disable", user, password, host, port),
 	)

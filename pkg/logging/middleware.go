@@ -30,11 +30,11 @@ func (l *logger) MiddlewareLogging(next http.Handler) http.Handler {
 		line := fmt.Sprintf("type:%s path:%s, el_time:%s", r.Method, r.RequestURI, end.Sub(start))
 		switch {
 		case recorder.status < 400:
-			l.InfoF(line)
+			l.Infof(line)
 		case recorder.status >= 400 && recorder.status < 500:
-			l.WarningF(line)
+			l.Warningf(line)
 		case recorder.status >= 500:
-			l.ErrorF(line)
+			l.Errorf(line)
 		}
 	})
 }

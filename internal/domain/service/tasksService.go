@@ -2,14 +2,14 @@ package service
 
 import (
 	"analytic-service/internal/ports"
-	"analytic-service/pkg/logging"
+	"github.com/sirupsen/logrus"
 )
 
 type TasksService struct {
 	db ports.TaskStorage
-	l  logging.ILogger
+	l  logrus.FieldLogger
 }
 
-func New(db ports.TaskStorage, logger logging.ILogger) *TasksService {
+func New(db ports.TaskStorage, logger logrus.FieldLogger) *TasksService {
 	return &TasksService{db: db, l: logger}
 }
