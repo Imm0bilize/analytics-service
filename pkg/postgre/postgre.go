@@ -15,7 +15,7 @@ type DB struct {
 
 func attemptPingDB(db *sql.DB, logger logrus.FieldLogger, nAttempts int) error {
 	if nAttempts <= 0 {
-		panic("the number of attempts to connect to the database must be a positive number")
+		return ErrNAttempts
 	}
 
 	startDelayTime := time.Second * 2
@@ -27,6 +27,8 @@ func attemptPingDB(db *sql.DB, logger logrus.FieldLogger, nAttempts int) error {
 		}
 		logger.Warningf("failed to connect to the database, retry via %v", nAttempts)
 		time.Sleep(startDelayTime)
+
+		nAttempts--
 		startDelayTime *= 2
 	}
 	return ErrConnectionToDb
