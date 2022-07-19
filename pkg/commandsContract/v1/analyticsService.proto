@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package interpretedProto;
+package commandsContract;
 option go_package = ".pkg/commandsContract/v1";
 
 import "google/protobuf/empty.proto";

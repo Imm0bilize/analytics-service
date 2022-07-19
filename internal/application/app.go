@@ -22,6 +22,7 @@ func Run(cfg *config.Config) {
 	if err != nil {
 		log.Fatalf("error when creating logger: %s", err.Error())
 	}
+	logger.Debugf("logger was successfully created")
 
 	// ValidateToken
 	authService, err := auth.New(cfg)
@@ -34,6 +35,7 @@ func Run(cfg *config.Config) {
 	if err != nil {
 		log.Fatalf("error when creating connection to auth service: %s", err.Error())
 	}
+	logger.Debugf("connection to the database was successful")
 	repo := repository.NewPgRepo(pg)
 
 	domainService := service.New(repo, logger)
@@ -42,13 +44,17 @@ func Run(cfg *config.Config) {
 	handler := v1.CreateHandler(domainService)
 	restServer := httpServer.New(cfg, handler.GetHttpHandler(authService.ValidateTokenStub, logger.MiddlewareLogging))
 	restServer.Run()
+	logger.Debugf("http server started successfully")
 
 	// grpc/broker
-	grpcServer, err := rpc.New(cfg, domainService)
+	grpcServer, err := rpc.New(cfg, logger, domainService)
 	if err != nil {
 		log.Fatalf("error when creating grpc server: %s", err.Error())
 	}
 	grpcServer.Run()
+	logger.Debugf("grpc server started successfully")
+
+	logger.Info("the service is ready to work")
 
 	// Shutdown
 	interrupt := make(chan os.Signal, 1)
@@ -56,11 +62,11 @@ func Run(cfg *config.Config) {
 
 	select {
 	case s := <-interrupt:
-		log.Print("an interrupt signal was received " + s.String())
+		logger.Infof("an interrupt signal was received: %s", s.String())
 	case err = <-restServer.Notify():
-		log.Fatalf("httpServer.Notify: %s", err.Error())
+		logger.Fatalf("httpServer.Notify: %s", err.Error())
 	case err = <-grpcServer.Notify():
-		log.Fatalf("grpcServer.Notify: %s", err.Error())
+		logger.Fatalf("grpcServer.Notify: %s", err.Error())
 	}
 
 	ctx, cancelFn := context.WithTimeout(
@@ -70,16 +76,16 @@ func Run(cfg *config.Config) {
 	defer cancelFn()
 
 	if err := restServer.Shutdown(ctx); err != nil {
-		logger.Errorf("error during shutdown httpServer: %v", err)
+		logger.Errorf("error during shutdown httpServer: %s", err.Error())
 	}
 	if err := pg.Shutdown(); err != nil {
-		logger.Errorf("error during shutdown DB: %v", err)
+		logger.Errorf("error during shutdown DB: %s", err.Error())
 	}
 	if err := authService.Shutdown(); err != nil {
-		logger.Errorf("error while close connection with auth service")
+		logger.Errorf("error while close connection with auth service: %s", err.Error())
 	}
 	if err := grpcServer.Shutdown(); err != nil {
-		logger.Errorf("error while close connection with auth service")
+		logger.Errorf("error during shutdown gRPC server: %s", err.Error())
 	}
 
 }
