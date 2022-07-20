@@ -49,7 +49,7 @@ func TestNew(t *testing.T) {
 
 	for _, testCase := range testTable {
 		t.Run(testCase.caseName, func(t *testing.T) {
-			_, err := New(logger, testCase.user, testCase.password, testCase.host, testCase.port, testCase.nAttempts)
+			_, err := New(logger, testCase.user, testCase.password, testCase.host, testCase.port, testCase.nAttempts, false)
 			require.Equal(t, testCase.expErr, err)
 		})
 	}
