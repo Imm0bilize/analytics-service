@@ -43,6 +43,7 @@ type dbCfg struct {
 	Port               string `yaml:"port"`
 	User               string `env:"DB_POSTGRES_USER"`
 	Password           string `env:"DB_POSTGRES_PASSWORD"`
+	IsNeedMigration    bool   `yaml:"is_need_migration"`
 	NAttemptsToConnect int    `yaml:"n_attempts_to_connect"`
 }
 

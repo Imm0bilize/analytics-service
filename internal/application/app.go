@@ -31,7 +31,7 @@ func Run(cfg *config.Config) {
 	}
 
 	// Database
-	pg, err := postgre.New(logger, cfg.Db.User, cfg.Db.Password, cfg.Db.Host, cfg.Db.Port, cfg.Db.NAttemptsToConnect)
+	pg, err := postgre.New(logger, cfg.Db.User, cfg.Db.Password, cfg.Db.Host, cfg.Db.Port, cfg.Db.NAttemptsToConnect, cfg.Db.IsNeedMigration)
 	if err != nil {
 		log.Fatalf("error when creating connection to auth service: %s", err.Error())
 	}

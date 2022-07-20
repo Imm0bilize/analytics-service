@@ -12,7 +12,7 @@ database:
   host: "localhost"
   port: "5432"
   n_attempts_to_connect: 3
-  is_need_migration: False
+  is_need_migration: True
 grpc_server:
   network: "tcp"
   host: "127.0.0.1"
