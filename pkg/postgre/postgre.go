@@ -2,7 +2,6 @@ package postgre
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
@@ -44,11 +43,11 @@ func makeMigrate(user, password, host, port string) error {
 		fmt.Sprintf("postgresql://%s:%s@%s:%s/postgres?sslmode=disable", user, password, host, port),
 	)
 	if err != nil {
-		return errors.New("failed to create an object for migration")
+		return fmt.Errorf("failed to create an object for migration: %s", err.Error())
 	}
 
 	if err := m.Up(); err != nil {
-		return errors.New("error during migration")
+		return fmt.Errorf("error during migration: %s", err.Error())
 	}
 	return nil
 }
