@@ -33,7 +33,7 @@ func Run(cfg *config.Config) {
 	// Database
 	pg, err := postgre.New(logger, cfg.Db.User, cfg.Db.Password, cfg.Db.Host, cfg.Db.Port, cfg.Db.NAttemptsToConnect, cfg.Db.IsNeedMigration)
 	if err != nil {
-		log.Fatalf("error when creating connection to auth service: %s", err.Error())
+		log.Fatalf("error when creating connection to db: %s", err.Error())
 	}
 	logger.Debugf("connection to the database was successful")
 	repo := repository.NewPgRepo(pg)
@@ -42,7 +42,7 @@ func Run(cfg *config.Config) {
 
 	// Rest
 	handler := v1.CreateHandler(domainService)
-	restServer := httpServer.New(cfg, handler.GetHttpHandler(authService.ValidateTokenStub, logger.MiddlewareLogging))
+	restServer := httpServer.New(cfg, handler.GetHttpHandler(authService.ValidateToken, logger.MiddlewareLogging))
 	restServer.Run()
 	logger.Debugf("http server started successfully")
 
