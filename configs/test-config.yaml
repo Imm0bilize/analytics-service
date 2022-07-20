@@ -11,6 +11,8 @@ auth_service:
 database:
   host: "localhost"
   port: "5432"
+  user: "postgres"
+  password: "secret"
   n_attempts_to_connect: 3
   is_need_migration: True
 grpc_server:
