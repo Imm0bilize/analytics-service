@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package commandsContract;
+option go_package = ".pkg/commandsContract/v1";
+
+import "google/protobuf/empty.proto";
+
+
+service Analytics{
+  rpc CreateTask(NewTask) returns (google.protobuf.Empty);
+  rpc SetTimeStart(TimeStart) returns (google.protobuf.Empty);
+  rpc SetTimeEnd(TimeEnd) returns (google.protobuf.Empty);
+}
+
+
+message NewTask {
+  string id = 1;
+}
+
+message UsersTask{
+  string taskId = 1;
+  string login = 2;
+}
+
+message TimeStart{
+  UsersTask user = 1;
+  string timeStart = 2;
+  optional string newTaskState = 3;
+}
+
+message TimeEnd{
+  UsersTask user = 1;
+  string timeEnd = 2;
+  optional string newTaskState = 3;
+}

@@ -1,0 +1,23 @@
+http:
+  port: "8080"
+  read_timeout: "10s"
+  write_timeout: "10s"
+logger:
+  level: "DEBUG"
+  ts_format: "2006-01-02T15:04:05Z07:00"  # RFC3339
+auth_service:
+  host: "127.0.0.1"
+  port: "3000"
+database:
+  host: "localhost"
+  port: "5432"
+  user: "postgres"
+  password: "secret"
+  n_attempts_to_connect: 3
+  is_need_migration: True
+grpc_server:
+  network: "tcp"
+  host: "127.0.0.1"
+  port: "3001"
+application_params:
+  shutdown_timeout: "10s"

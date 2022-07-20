@@ -1,0 +1,100 @@
+basePath: /
+definitions:
+  dto.NumAgreedTasksDTO:
+    properties:
+      num_agreed_tasks:
+        type: integer
+    type: object
+  dto.NumRejectedTaskDTO:
+    properties:
+      num_rejected_tasks:
+        type: integer
+    type: object
+  dto.TotalTimeDTO:
+    properties:
+      total_time:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Service for collecting analytics about working with tasks from clients
+  title: Analytics service
+  version: "1.0"
+paths:
+  /api/tasks/num-accepted:
+    get:
+      consumes:
+      - application/json
+      description: the handler allows you to get the total number of accepted tasks
+        stored in the database
+      operationId: get-num-accepted-tasks
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.NumAgreedTasksDTO'
+        "500":
+          description: error during encoding to json
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      - ApiKeyAuth: []
+      summary: getting the number of accepted tasks
+      tags:
+      - tasks
+  /api/tasks/num-rejected:
+    get:
+      consumes:
+      - application/json
+      description: the handler allows you to get the total number of rejected tasks
+        stored in the database
+      operationId: get-num-rejected-tasks
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.NumRejectedTaskDTO'
+        "500":
+          description: error during encoding to json
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: getting the number of rejected tasks
+      tags:
+      - tasks
+  /api/tasks/total-time:
+    get:
+      consumes:
+      - application/json
+      description: the handler allows you to get the total amount of time spent on
+        confirmed or rejected tasks
+      operationId: get-total-time
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TotalTimeDTO'
+        "500":
+          description: error during encoding to json
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: getting the total time for all tasks
+      tags:
+      - tasks
+  /debug/healthz:
+    get:
+      description: check service health
+      operationId: health-check
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      tags:
+      - debug
+swagger: "2.0"

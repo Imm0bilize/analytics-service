@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package api;
+option go_package = ".pkg/api/proto/v1";
+
+service Auth {
+    rpc RefreshTokens(RefreshTokensRequest) returns (RefreshTokensResponse){}
+}
+
+message RefreshTokensRequest {
+    string accessToken = 1;
+    string refreshToken = 2;
+}
+
+message RefreshTokensResponse {
+    string accessToken = 1;
+    string refreshToken = 2;
+}
