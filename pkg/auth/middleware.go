@@ -16,7 +16,7 @@ func (g *GrpcAuth) ValidateToken(next http.Handler) http.Handler {
 			return
 		}
 
-		if newAccToken, newRefToken, err := g.RefreshTokens(r.Context(), accessToken.Value, refreshToken.Value); err != nil {
+		if newAccToken, newRefToken, err := g.refreshTokens(r.Context(), accessToken.Value, refreshToken.Value); err != nil {
 			http.Error(w, err.Error(), http.StatusForbidden)
 			return
 		} else {
