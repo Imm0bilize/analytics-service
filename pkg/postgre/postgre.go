@@ -37,10 +37,10 @@ func attemptPingDB(db *sql.DB, logger logrus.FieldLogger, nAttempts int) error {
 	return ErrConnectionToDb
 }
 
-func makeMigrate(user, password, host, port string) error {
+func makeMigrate(user, password, host, port, dbName string) error {
 	m, err := migrate.New(
 		"file://migrations",
-		fmt.Sprintf("postgresql://%s:%s@%s:%s/postgres?sslmode=disable", user, password, host, port),
+		fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", user, password, host, port, dbName),
 	)
 	if err != nil {
 		return fmt.Errorf("failed to create an object for migration: %s", err.Error())
@@ -52,9 +52,9 @@ func makeMigrate(user, password, host, port string) error {
 	return nil
 }
 
-func New(logger logrus.FieldLogger, user, password, host, port string, nAttempts int, isNeedMigrate bool) (*DB, error) {
+func New(logger logrus.FieldLogger, user, password, host, port, dbName string, nAttempts int, isNeedMigrate bool) (*DB, error) {
 	cfg, err := pgx.ParseConfig(
-		fmt.Sprintf("postgresql://%s:%s@%s:%s/postgres?sslmode=disable", user, password, host, port),
+		fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", user, password, host, port, dbName),
 	)
 	if err != nil {
 		return nil, ErrParseConfigFile
@@ -68,7 +68,7 @@ func New(logger logrus.FieldLogger, user, password, host, port string, nAttempts
 	}
 
 	if isNeedMigrate {
-		if err := makeMigrate(user, password, host, port); err != nil {
+		if err := makeMigrate(user, password, host, port, dbName); err != nil {
 			return nil, err
 		}
 	}

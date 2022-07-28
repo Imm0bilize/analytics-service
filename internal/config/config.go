@@ -39,12 +39,13 @@ type grpcCfg struct {
 }
 
 type dbCfg struct {
+	IsNeedMigration    bool   `yaml:"is_need_migration"`
+	NAttemptsToConnect int    `yaml:"n_attempts_to_connect"`
 	Host               string `yaml:"host"`
 	Port               string `yaml:"port"`
 	User               string `yaml:"user" env:"DB_POSTGRES_USER" `
 	Password           string `yaml:"password" env:"DB_POSTGRES_PASSWORD" `
-	IsNeedMigration    bool   `yaml:"is_need_migration"`
-	NAttemptsToConnect int    `yaml:"n_attempts_to_connect"`
+	DbName             string `yaml:"db_name" env:"DB_POSTGRES_DBNAME"`
 }
 
 type Config struct {

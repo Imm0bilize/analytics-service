@@ -25,13 +25,17 @@ func Run(cfg *config.Config) {
 	logger.Debugf("logger was successfully created")
 
 	// ValidateToken
-	authService, err := auth.New(cfg)
+	authService, err := auth.New(cfg.Auth.Host, cfg.Auth.Port)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Database
-	pg, err := postgre.New(logger, cfg.Db.User, cfg.Db.Password, cfg.Db.Host, cfg.Db.Port, cfg.Db.NAttemptsToConnect, cfg.Db.IsNeedMigration)
+	pg, err := postgre.New(
+		logger,
+		cfg.Db.User, cfg.Db.Password, cfg.Db.Host, cfg.Db.Port, cfg.Db.DbName,
+		cfg.Db.NAttemptsToConnect, cfg.Db.IsNeedMigration,
+	)
 	if err != nil {
 		log.Fatalf("error when creating connection to db: %s", err.Error())
 	}
@@ -42,7 +46,12 @@ func Run(cfg *config.Config) {
 
 	// Rest
 	handler := v1.CreateHandler(domainService)
-	restServer := httpServer.New(cfg, handler.GetHttpHandler(authService.ValidateToken, logger.MiddlewareLogging))
+	restServer := httpServer.New(
+		handler.GetHttpHandler(authService.ValidateToken, logger.MiddlewareLogging),
+		cfg.Http.Port,
+		cfg.Http.ReadTimeout,
+		cfg.Http.WriteTimeout,
+	)
 	restServer.Run()
 	logger.Debugf("http server started successfully")
 
