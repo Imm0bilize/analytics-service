@@ -15,6 +15,6 @@ type TasksRepo struct {
 	*pg.DB
 }
 
-func NewTasksRepo(db *pg.DB) *TasksRepo {
+func New(db *pg.DB) *TasksRepo {
 	return &TasksRepo{db}
 }

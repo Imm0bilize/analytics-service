@@ -10,7 +10,7 @@ type IdempotencyKeyRepo struct {
 	*pg.DB
 }
 
-func NewIdempotencyKeyRepo(db *pg.DB) *IdempotencyKeyRepo {
+func New(db *pg.DB) *IdempotencyKeyRepo {
 	return &IdempotencyKeyRepo{db}
 }
 
