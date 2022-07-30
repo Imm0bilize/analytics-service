@@ -1,4 +1,4 @@
-package repository
+package tasksRepo
 
 import (
 	pg "analytic-service/pkg/postgre"
@@ -11,10 +11,10 @@ const (
 	taskStateProcessing = "processing"
 )
 
-type Repository struct {
+type TasksRepo struct {
 	*pg.DB
 }
 
-func NewPgRepo(db *pg.DB) *Repository {
-	return &Repository{db}
+func NewTasksRepo(db *pg.DB) *TasksRepo {
+	return &TasksRepo{db}
 }

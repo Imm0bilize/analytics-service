@@ -1,10 +1,10 @@
-package repository
+package tasksRepo
 
 import (
 	"context"
 )
 
-func (r *Repository) getNumRecordsByState(ctx context.Context, state string) (int, error) {
+func (r *TasksRepo) getNumRecordsByState(ctx context.Context, state string) (int, error) {
 	var count int
 	err := r.Conn.QueryRowContext(ctx, "select count(*) from tasks_app.tasks_state where tasks_app.tasks_state.state=$1", state).Scan(&count)
 	if err != nil {
@@ -13,7 +13,7 @@ func (r *Repository) getNumRecordsByState(ctx context.Context, state string) (in
 	return count, nil
 }
 
-func (r *Repository) GetTotalTime(ctx context.Context) (string, error) {
+func (r *TasksRepo) GetTotalTime(ctx context.Context) (string, error) {
 	var totalTime string
 	err := r.Conn.QueryRowContext(
 		ctx,
@@ -27,7 +27,7 @@ func (r *Repository) GetTotalTime(ctx context.Context) (string, error) {
 	return totalTime, nil
 }
 
-func (r *Repository) GetNumAgreedTasks(ctx context.Context) (int, error) {
+func (r *TasksRepo) GetNumAgreedTasks(ctx context.Context) (int, error) {
 	count, err := r.getNumRecordsByState(ctx, taskStateAccepted)
 	if err != nil {
 		return 0, ErrCreateQuery
@@ -35,7 +35,7 @@ func (r *Repository) GetNumAgreedTasks(ctx context.Context) (int, error) {
 	return count, nil
 }
 
-func (r *Repository) GetNumRejectedTasks(ctx context.Context) (int, error) {
+func (r *TasksRepo) GetNumRejectedTasks(ctx context.Context) (int, error) {
 	count, err := r.getNumRecordsByState(ctx, taskStateRejected)
 	if err != nil {
 		return 0, ErrCreateQuery
