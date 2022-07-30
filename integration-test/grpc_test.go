@@ -6,6 +6,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+const serviceGrpcPort = "3001"
+
 func (i *integrationTestSuite) TestCommandPositive() {
 	client, err := v1.NewClient(serviceUrl, serviceGrpcPort)
 	if err != nil {
