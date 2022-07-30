@@ -1,5 +1,11 @@
 package kafkaSchemes
 
+const (
+	CreateTaskType = "create_task"
+	SetStartType   = "set_start"
+	SetEndType     = "set_end"
+)
+
 type TaskAnalyticsCreateTypePayload struct {
 	TaskID string `json:"task_id"`
 }

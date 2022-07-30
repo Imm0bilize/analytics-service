@@ -104,15 +104,15 @@ func (k *KafkaConsumer) selectCommand(rawMessage []byte) {
 	}
 
 	switch message.TypeTopic {
-	case "create_task":
+	case kafkaSchemes.CreateTaskType:
 		if err := k.onCreateCommand(ctx, &rawMessage); err != nil {
 			return
 		}
-	case "set_start":
+	case kafkaSchemes.SetStartType:
 		if err := k.onSetStartCommand(ctx, &rawMessage); err != nil {
 			return
 		}
-	case "set_end":
+	case kafkaSchemes.SetEndType:
 		if err := k.onSetEndCommand(ctx, &rawMessage); err != nil {
 			return
 		}
