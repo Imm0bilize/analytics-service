@@ -28,7 +28,7 @@ func attemptPingDB(db *sql.DB, logger logrus.FieldLogger, nAttempts int) error {
 		if err == nil {
 			return nil
 		}
-		logger.Warningf("failed to connect to the database, retry via %v", nAttempts)
+		logger.Errorf("failed to connect to the database, retry via %v", startDelayTime)
 		time.Sleep(startDelayTime)
 
 		nAttempts--
