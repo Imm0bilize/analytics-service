@@ -38,6 +38,13 @@ type grpcCfg struct {
 	Port    string `yaml:"port"`
 }
 
+type kafkaCfg struct {
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	Topic    string `yaml:"topic"`
+	ClientID string `yaml:"client_id"`
+}
+
 type dbCfg struct {
 	IsNeedMigration    bool   `yaml:"is_need_migration"`
 	NAttemptsToConnect int    `yaml:"n_attempts_to_connect"`
@@ -54,6 +61,7 @@ type Config struct {
 	Auth      authCfg   `yaml:"auth_service"`
 	Db        dbCfg     `yaml:"database"`
 	Grpc      grpcCfg   `yaml:"grpc_server"`
+	Kafka     kafkaCfg  `yaml:"kafka"`
 	AppParams appCfg    `yaml:"application_params"`
 }
 
