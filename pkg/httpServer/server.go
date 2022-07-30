@@ -1,11 +1,11 @@
 package httpServer
 
 import (
-	"analytic-service/internal/config"
 	"context"
 	"errors"
 	"net"
 	"net/http"
+	"time"
 )
 
 type Server struct {
@@ -13,14 +13,14 @@ type Server struct {
 	server *http.Server
 }
 
-func New(cfg *config.Config, handler http.Handler) *Server {
+func New(handler http.Handler, port string, readTimeout, writeTimeout time.Duration) *Server {
 	s := &Server{
 		notify: make(chan error, 1),
 		server: &http.Server{
 			Handler:      handler,
-			Addr:         net.JoinHostPort("", cfg.Http.Port),
-			ReadTimeout:  cfg.Http.ReadTimeout,
-			WriteTimeout: cfg.Http.WriteTimeout,
+			Addr:         net.JoinHostPort("", port),
+			ReadTimeout:  readTimeout,
+			WriteTimeout: writeTimeout,
 		},
 	}
 	return s

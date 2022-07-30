@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"analytic-service/internal/config"
 	v1 "analytic-service/pkg/auth/proto/v1"
 	"context"
 	"fmt"
@@ -14,9 +13,9 @@ type GrpcAuth struct {
 	client v1.AuthClient
 }
 
-func New(cfg *config.Config) (*GrpcAuth, error) {
+func New(host, port string) (*GrpcAuth, error) {
 	conn, err := grpc.Dial(
-		fmt.Sprintf("%v:%v", cfg.Auth.Host, cfg.Auth.Port),
+		fmt.Sprintf("%v:%v", host, port),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
@@ -26,7 +25,7 @@ func New(cfg *config.Config) (*GrpcAuth, error) {
 	return &GrpcAuth{conn: conn, client: client}, nil
 }
 
-func (g *GrpcAuth) RefreshTokens(ctx context.Context, accessToken, refreshToken string) (string, string, error) {
+func (g *GrpcAuth) refreshTokens(ctx context.Context, accessToken, refreshToken string) (string, string, error) {
 	request := &v1.RefreshTokensRequest{AccessToken: accessToken, RefreshToken: refreshToken}
 	r, err := g.client.RefreshTokens(ctx, request)
 	if err != nil {

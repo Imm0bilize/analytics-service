@@ -1,4 +1,4 @@
-package repository
+package tasksRepo
 
 import (
 	"context"
@@ -17,7 +17,7 @@ func closingTxIfError(err error, tx *sql.Tx) error {
 	return nil
 }
 
-func (r *Repository) CreateTask(ctx context.Context, taskID string) error {
+func (r *TasksRepo) CreateTask(ctx context.Context, taskID string) error {
 	tx, err := r.Conn.BeginTx(ctx, nil)
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (r *Repository) CreateTask(ctx context.Context, taskID string) error {
 	return nil
 }
 
-func (r *Repository) SetTimeStart(ctx context.Context, taskID, login, startTime, newState string) error {
+func (r *TasksRepo) SetTimeStart(ctx context.Context, taskID, login, startTime, newState string) error {
 	tx, err := r.Conn.BeginTx(ctx, nil)
 	if err != nil {
 		return err
@@ -58,7 +58,7 @@ func (r *Repository) SetTimeStart(ctx context.Context, taskID, login, startTime,
 	return nil
 }
 
-func (r *Repository) SetTimeEnd(ctx context.Context, taskID, login, endTime, newState string) error {
+func (r *TasksRepo) SetTimeEnd(ctx context.Context, taskID, login, endTime, newState string) error {
 	tx, err := r.Conn.BeginTx(ctx, nil)
 	if err != nil {
 		return err
