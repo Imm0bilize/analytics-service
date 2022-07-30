@@ -53,38 +53,41 @@ func (k *KafkaConsumer) checkIdempotencyKey(ctx context.Context, key string) err
 }
 
 func (k *KafkaConsumer) onCreateCommand(ctx context.Context, rawMessage *[]byte) error {
-	var payload kafkaSchemes.TaskAnalyticsCreateTypePayload
-	if err := json.Unmarshal(*rawMessage, &payload); err != nil {
-		k.logger.Errorf("error: <%s> while unmarshalling payload, message header: %v", err.Error())
+	var message kafkaSchemes.TaskAnalyticsCreateType
+	if err := json.Unmarshal(*rawMessage, &message); err != nil {
+		k.logger.Errorf("error: <%s> while unmarshalling message, message header: %v", err.Error())
 		return err
 	}
-	if err := k.domain.CreateTask(ctx, payload.TaskID); err != nil {
+	if err := k.domain.CreateTask(ctx, message.Payload.TaskID); err != nil {
 		return err
 	}
+	k.logger.Infof("task with id {%s} successfully created", message.Payload.TaskID)
 	return nil
 }
 
 func (k *KafkaConsumer) onSetStartCommand(ctx context.Context, rawMessage *[]byte) error {
-	var payload kafkaSchemes.TaskAnalyticsAcceptRejectTypePayload
-	if err := json.Unmarshal(*rawMessage, &payload); err != nil {
-		k.logger.Errorf("error: <%s> while unmarshalling payload", err.Error())
+	var message kafkaSchemes.TaskAnalyticsAcceptRejectType
+	if err := json.Unmarshal(*rawMessage, &message); err != nil {
+		k.logger.Errorf("error: <%s> while unmarshalling message", err.Error())
 		return err
 	}
-	if err := k.domain.SetTimeStart(ctx, payload.TaskID, payload.Email, payload.Time, payload.TaskState); err != nil {
+	if err := k.domain.SetTimeStart(ctx, message.Payload.TaskID, message.Payload.Email, message.Payload.Time, message.Payload.TaskState); err != nil {
 		return err
 	}
+	k.logger.Infof("set time start completed successfully")
 	return nil
 }
 
 func (k *KafkaConsumer) onSetEndCommand(ctx context.Context, rawMessage *[]byte) error {
-	var payload kafkaSchemes.TaskAnalyticsAcceptRejectTypePayload
-	if err := json.Unmarshal(*rawMessage, &payload); err != nil {
-		k.logger.Errorf("error: <%s> while unmarshalling payload", err.Error())
+	var message kafkaSchemes.TaskAnalyticsAcceptRejectType
+	if err := json.Unmarshal(*rawMessage, &message); err != nil {
+		k.logger.Errorf("error: <%s> while unmarshalling message", err.Error())
 		return err
 	}
-	if err := k.domain.SetTimeEnd(ctx, payload.TaskID, payload.Email, payload.Time, payload.TaskState); err != nil {
+	if err := k.domain.SetTimeEnd(ctx, message.Payload.TaskID, message.Payload.Email, message.Payload.Time, message.Payload.TaskState); err != nil {
 		return err
 	}
+	k.logger.Infof("set time end completed successfully")
 	return nil
 }
 
@@ -124,7 +127,7 @@ func (k *KafkaConsumer) selectCommand(rawMessage []byte) {
 
 func (k *KafkaConsumer) Run(interruptChan chan os.Signal) {
 	go func() {
-		consumer, err := k.C.ConsumePartition(k.topic, 0, sarama.OffsetNewest)
+		consumer, err := k.C.ConsumePartition(k.topic, 0, sarama.OffsetOldest)
 		if err != nil {
 			k.notify <- err
 			close(k.notify)
