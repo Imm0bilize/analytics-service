@@ -1,39 +1,30 @@
 package logging
 
 import (
+	"analytic-service/pkg/responseWriter"
 	"fmt"
 	"net/http"
 	"time"
 )
 
-type statusRecorder struct {
-	http.ResponseWriter
-	status int
-}
-
-func (r *statusRecorder) WriteHeader(status int) {
-	r.status = status
-	r.ResponseWriter.WriteHeader(status)
-}
-
 func (l *logger) MiddlewareLogging(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		recorder := &statusRecorder{
+		interceptor := &responseWriter.Interceptor{
 			ResponseWriter: w,
-			status:         200,
+			StatusCode:     http.StatusOK,
 		}
 
 		start := time.Now()
-		next.ServeHTTP(recorder, r)
+		next.ServeHTTP(interceptor, r)
 		end := time.Now()
 
 		line := fmt.Sprintf("type:%s path:%s, el_time:%s", r.Method, r.RequestURI, end.Sub(start))
 		switch {
-		case recorder.status < 400:
+		case interceptor.StatusCode < 400:
 			l.Infof(line)
-		case recorder.status >= 400 && recorder.status < 500:
+		case interceptor.StatusCode >= 400 && interceptor.StatusCode < 500:
 			l.Warningf(line)
-		case recorder.status >= 500:
+		case interceptor.StatusCode >= 500:
 			l.Errorf(line)
 		}
 	})
