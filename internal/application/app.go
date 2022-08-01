@@ -12,6 +12,7 @@ import (
 	"analytic-service/pkg/kafka"
 	"analytic-service/pkg/logging"
 	"analytic-service/pkg/postgre"
+	"analytic-service/pkg/prometheus"
 	"context"
 	"log"
 	"net"
@@ -49,9 +50,12 @@ func Run(cfg *config.Config) {
 	}
 
 	// Rest
+	metrics := prometheus.New("9001")
+	metrics.Run()
+
 	handler := v1.CreateHandler(domainService)
 	restServer := httpServer.New(
-		handler.GetHttpHandler(authService.ValidateTokenStub, logger.MiddlewareLogging),
+		handler.GetHttpHandler(authService.ValidateTokenStub, logger.MiddlewareLogging, metrics.MetricsMiddleware),
 		cfg.Http.Port,
 		cfg.Http.ReadTimeout,
 		cfg.Http.WriteTimeout,
@@ -85,6 +89,9 @@ func Run(cfg *config.Config) {
 		logger.Fatalf("httpServer.Notify: %s", err.Error())
 	case err = <-broker.Notify():
 		logger.Fatalf("broker.Notify: %s", err.Error())
+	case err = <-metrics.Notify():
+		logger.Fatalf("Metrics: %s", err.Error())
+
 	}
 
 	ctx, cancelFn := context.WithTimeout(
