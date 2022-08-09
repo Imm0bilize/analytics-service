@@ -18,3 +18,7 @@ create table if not exists tasks_app.user_accept_time
     time_start      timestamp,
     time_end        timestamp
 );
+
+create table tasks_app.idempotency_keys(
+    key varchar(36) not null
+);
