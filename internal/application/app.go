@@ -14,11 +14,14 @@ import (
 	"analytic-service/pkg/postgre"
 	"analytic-service/pkg/prometheus"
 	"context"
+	"github.com/getsentry/sentry-go"
+	sentryhttp "github.com/getsentry/sentry-go/http"
 	"log"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 func Run(cfg *config.Config) {
@@ -49,13 +52,30 @@ func Run(cfg *config.Config) {
 		log.Fatal(err)
 	}
 
-	// Rest
-	metrics := prometheus.New("9001")
+	// Sentry
+	err = sentry.Init(
+		sentry.ClientOptions{
+			Dsn:   cfg.Sentry.Dsn,
+			Debug: cfg.Sentry.Debug,
+		},
+	)
+	if err != nil {
+		logger.Fatalf("error when init sentry: %s", err.Error())
+	}
+	defer sentry.Flush(time.Second * 5)
+	sentryMiddleware := sentryhttp.New(sentryhttp.Options{
+		Repanic: true,
+		Timeout: cfg.Sentry.FlushTimeout,
+	})
+
+	// Prometheus
+	metrics := prometheus.New(cfg.Prometheus.Port)
 	metrics.Run()
 
+	// Rest
 	handler := v1.CreateHandler(domainService)
 	restServer := httpServer.New(
-		handler.GetHttpHandler(authService.ValidateTokenStub, logger.MiddlewareLogging, metrics.MetricsMiddleware),
+		handler.GetHttpHandler(authService.ValidateTokenStub, logger.MiddlewareLogging, metrics.MetricsMiddleware, sentryMiddleware.Handle),
 		cfg.Http.Port,
 		cfg.Http.ReadTimeout,
 		cfg.Http.WriteTimeout,
