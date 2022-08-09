@@ -75,7 +75,7 @@ func Run(cfg *config.Config) {
 	// Rest
 	handler := v1.CreateHandler(domainService)
 	restServer := httpServer.New(
-		handler.GetHttpHandler(authService.ValidateTokenStub, logger.MiddlewareLogging, metrics.MetricsMiddleware, sentryMiddleware.Handle),
+		handler.GetHttpHandler(authService.ValidateToken, logger.MiddlewareLogging, metrics.MetricsMiddleware, sentryMiddleware.Handle),
 		cfg.Http.Port,
 		cfg.Http.ReadTimeout,
 		cfg.Http.WriteTimeout,
