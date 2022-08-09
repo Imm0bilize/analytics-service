@@ -1,32 +1,29 @@
 http:
-  port: "8080"
+  port: "3000"
   read_timeout: "10s"
   write_timeout: "10s"
 logger:
-  level: "DEBUG"
+  level: "INFO"
   ts_format: "2006-01-02T15:04:05Z07:00"  # RFC3339
 auth_service:
-  host: "127.0.0.1"
-  port: "3000"
+  host: "192.168.102.249"
+  port: "4000"
 database:
-  host: "localhost"
+  host: "91.185.93.23"
   port: "5432"
+  db_name: "team29"
   n_attempts_to_connect: 3
   is_need_migration: False
-grpc_server:
-  network: "tcp"
-  host: "127.0.0.1"
-  port: "3001"
 kafka:
-  host: "127.0.0.1"
-  port: "9092"
-  topic: "test"
+  host: "91.185.95.87"
+  port: "9094"
+  topic: "team29-taskAnalytics"
   client_id: "analytics"
 prometheus:
   port: "9000"
 sentry:
   dsn: "https://c834e61c11a011edbe6e5e281bf79dea@sentry.k8s.golang-mts-teta.ru/48"
-  debug: True
+  debug: False
   flush_timeout: "10s"
 application_params:
   shutdown_timeout: "10s"

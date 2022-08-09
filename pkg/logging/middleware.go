@@ -18,7 +18,7 @@ func (l *logger) MiddlewareLogging(next http.Handler) http.Handler {
 		next.ServeHTTP(interceptor, r)
 		end := time.Now()
 
-		line := fmt.Sprintf("type:%s path:%s, el_time:%s", r.Method, r.RequestURI, end.Sub(start))
+		line := fmt.Sprintf("type:%s | path:%s | status: %d | el_time:%s", r.Method, r.RequestURI, interceptor.StatusCode, end.Sub(start))
 		switch {
 		case interceptor.StatusCode < 400:
 			l.Infof(line)
