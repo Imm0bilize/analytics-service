@@ -14,7 +14,7 @@ func New(db *pg.DB) *IdempotencyKeyRepo {
 	return &IdempotencyKeyRepo{db}
 }
 
-func (i IdempotencyKeyRepo) CheckIdempotencyKeyInStore(ctx context.Context, key string) (bool, error) {
+func (i *IdempotencyKeyRepo) CheckIdempotencyKeyInStore(ctx context.Context, key string) (bool, error) {
 	var count int
 	err := i.Conn.QueryRowContext(ctx, "select count(*) from tasks_app.idempotency_keys where tasks_app.idempotency_keys.key=$1", key).Scan(&count)
 	if err != nil {
@@ -26,7 +26,7 @@ func (i IdempotencyKeyRepo) CheckIdempotencyKeyInStore(ctx context.Context, key 
 	return true, nil
 }
 
-func (i IdempotencyKeyRepo) Commit(ctx context.Context, key string) error {
+func (i *IdempotencyKeyRepo) Commit(ctx context.Context, key string) error {
 	tx, err := i.Conn.BeginTx(ctx, nil)
 	if err != nil {
 		return err
