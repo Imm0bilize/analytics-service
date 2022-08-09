@@ -91,9 +91,10 @@ func New(path string) (*Config, error) {
 }
 
 func GetPathToCfgFromEnv() (string, error) {
-	err := godotenv.Load()
-	if err == nil {
+	if err := godotenv.Load("/app/.env"); err == nil {
 		log.Println(".env file found")
+	} else {
+		log.Printf(".env file not found: %s", err.Error())
 	}
 
 	path := os.Getenv("CONFIG_PATH")

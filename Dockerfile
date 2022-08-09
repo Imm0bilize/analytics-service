@@ -9,5 +9,5 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -o application cmd/service
 FROM alpine:3.15.4
 COPY --from=builder /app/application /app/application
 COPY --from=builder /app/configs/* /app/configs/
-COPY --from=builder /app/.env /app/.env
+COPY --from=builder /app/.env /app/
 CMD ["/app/application"]
