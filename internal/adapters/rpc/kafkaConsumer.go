@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/Shopify/sarama"
+	"github.com/getsentry/sentry-go"
 	"github.com/sirupsen/logrus"
 	"os"
 )
@@ -42,6 +43,7 @@ func NewKafkaConsumer(
 func (k *KafkaConsumer) checkIdempotencyKey(ctx context.Context, key string) error {
 	ok, err := k.idempKeyStore.CheckIdempotencyKeyInStore(ctx, key)
 	if err != nil {
+		sentry.CaptureException(err)
 		k.logger.Errorf("failed to check idempotency key in storage: %s", err.Error())
 		return err
 	}
@@ -59,6 +61,7 @@ func (k *KafkaConsumer) onCreateCommand(ctx context.Context, rawMessage *[]byte)
 		return err
 	}
 	if err := k.domain.CreateTask(ctx, message.Payload.TaskID); err != nil {
+		sentry.CaptureException(err)
 		return err
 	}
 	k.logger.Infof("task with id {%s} successfully created", message.Payload.TaskID)
@@ -72,6 +75,7 @@ func (k *KafkaConsumer) onSetStartCommand(ctx context.Context, rawMessage *[]byt
 		return err
 	}
 	if err := k.domain.SetTimeStart(ctx, message.Payload.TaskID, message.Payload.Email, message.Payload.Time, message.Payload.TaskState); err != nil {
+		sentry.CaptureException(err)
 		return err
 	}
 	k.logger.Infof("set time start completed successfully")
@@ -85,6 +89,7 @@ func (k *KafkaConsumer) onSetEndCommand(ctx context.Context, rawMessage *[]byte)
 		return err
 	}
 	if err := k.domain.SetTimeEnd(ctx, message.Payload.TaskID, message.Payload.Email, message.Payload.Time, message.Payload.TaskState); err != nil {
+		sentry.CaptureException(err)
 		return err
 	}
 	k.logger.Infof("set time end completed successfully")
