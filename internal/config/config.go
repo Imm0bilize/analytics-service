@@ -55,14 +55,26 @@ type dbCfg struct {
 	DbName             string `yaml:"db_name" env:"DB_POSTGRES_DBNAME"`
 }
 
+type sentryCfg struct {
+	Debug        bool          `yaml:"debug"`
+	Dsn          string        `yaml:"dsn"`
+	FlushTimeout time.Duration `yaml:"flush_timeout"`
+}
+
+type prometheusCfg struct {
+	Port string `yaml:"port"`
+}
+
 type Config struct {
-	Http      httpCfg   `yaml:"http"`
-	Logger    loggerCgf `yaml:"logger"`
-	Auth      authCfg   `yaml:"auth_service"`
-	Db        dbCfg     `yaml:"database"`
-	Grpc      grpcCfg   `yaml:"grpc_server"`
-	Kafka     kafkaCfg  `yaml:"kafka"`
-	AppParams appCfg    `yaml:"application_params"`
+	Http       httpCfg       `yaml:"http"`
+	Logger     loggerCgf     `yaml:"logger"`
+	Auth       authCfg       `yaml:"auth_service"`
+	Db         dbCfg         `yaml:"database"`
+	Grpc       grpcCfg       `yaml:"grpc_server"`
+	Kafka      kafkaCfg      `yaml:"kafka"`
+	Sentry     sentryCfg     `yaml:"sentry"`
+	Prometheus prometheusCfg `yaml:"prometheus"`
+	AppParams  appCfg        `yaml:"application_params"`
 }
 
 func New(path string) (*Config, error) {
