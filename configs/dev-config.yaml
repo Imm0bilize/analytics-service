@@ -22,5 +22,11 @@ kafka:
   port: "9092"
   topic: "test"
   client_id: "analytics"
+prometheus:
+  port: "9000"
+sentry:
+  dsn: "https://c834e61c11a011edbe6e5e281bf79dea@sentry.k8s.golang-mts-teta.ru/48"
+  debug: True
+  flush_timeout: "10s"
 application_params:
   shutdown_timeout: "10s"
