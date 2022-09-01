@@ -12,7 +12,7 @@ import (
 // @Tags         tasks
 // @Security     ApiKeyAuth
 // @Accept       json
-// @Success      200  {object}  dto.NumAgreedTasksDTO
+// @Success      200  {object}  dto.NumAgreedTasksResponse
 // @Failure      500  {string}  string  "error when querying the database"
 // @Failure      500  {string}  string  "error during encoding to json"
 // @Security     ApiKeyAuth
@@ -38,7 +38,7 @@ func (h *Handler) getNumAcceptedTasks(w http.ResponseWriter, r *http.Request) {
 // @ID           get-num-rejected-tasks
 // @Tags         tasks
 // @Accept       json
-// @Success      200  {object}  dto.NumRejectedTaskDTO
+// @Success      200  {object}  dto.NumRejectedTaskResponse
 // @Failure      500  {string}  string  "error when querying the database"
 // @Failure      500  {string}  string  "error during encoding to json"
 // @Security     ApiKeyAuth
@@ -63,7 +63,7 @@ func (h *Handler) getNumRejectedTasks(w http.ResponseWriter, r *http.Request) {
 // @ID           get-total-time
 // @Tags         tasks
 // @Accept       json
-// @Success      200  {object}  dto.TotalTimeDTO
+// @Success      200  {object}  dto.TotalTimeResponse
 // @Failure      500  {string}  string  "error when querying the database"
 // @Failure      500  {string}  string  "error during encoding to json"
 // @Security     ApiKeyAuth

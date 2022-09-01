@@ -1,16 +1,16 @@
 basePath: /
 definitions:
-  dto.NumAgreedTasksDTO:
+  dto.NumAgreedTasksResponse:
     properties:
       num_agreed_tasks:
         type: integer
     type: object
-  dto.NumRejectedTaskDTO:
+  dto.NumRejectedTaskResponse:
     properties:
       num_rejected_tasks:
         type: integer
     type: object
-  dto.TotalTimeDTO:
+  dto.TotalTimeResponse:
     properties:
       total_time:
         type: string
@@ -33,7 +33,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.NumAgreedTasksDTO'
+            $ref: '#/definitions/dto.NumAgreedTasksResponse'
         "500":
           description: error during encoding to json
           schema:
@@ -55,7 +55,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.NumRejectedTaskDTO'
+            $ref: '#/definitions/dto.NumRejectedTaskResponse'
         "500":
           description: error during encoding to json
           schema:
@@ -76,7 +76,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.TotalTimeDTO'
+            $ref: '#/definitions/dto.TotalTimeResponse'
         "500":
           description: error during encoding to json
           schema:

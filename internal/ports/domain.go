@@ -6,9 +6,9 @@ import (
 )
 
 type QueryDomain interface {
-	GetTotalTime(ctx context.Context) (*dto.TotalTimeDTO, error)
-	GetNumAgreedTasks(ctx context.Context) (*dto.NumAgreedTasksDTO, error)
-	GetNumRejectedTasks(ctx context.Context) (*dto.NumRejectedTaskDTO, error)
+	GetTotalTime(ctx context.Context) (*dto.TotalTimeResponse, error)
+	GetNumAgreedTasks(ctx context.Context) (*dto.NumAgreedTasksResponse, error)
+	GetNumRejectedTasks(ctx context.Context) (*dto.NumRejectedTaskResponse, error)
 }
 
 type CommandDomain interface {
