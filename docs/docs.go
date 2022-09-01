@@ -39,7 +39,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.NumAgreedTasksDTO"
+                            "$ref": "#/definitions/dto.NumAgreedTasksResponse"
                         }
                     },
                     "500": {
@@ -71,7 +71,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.NumRejectedTaskDTO"
+                            "$ref": "#/definitions/dto.NumRejectedTaskResponse"
                         }
                     },
                     "500": {
@@ -103,7 +103,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.TotalTimeDTO"
+                            "$ref": "#/definitions/dto.TotalTimeResponse"
                         }
                     },
                     "500": {
@@ -134,7 +134,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dto.NumAgreedTasksDTO": {
+        "dto.NumAgreedTasksResponse": {
             "type": "object",
             "properties": {
                 "num_agreed_tasks": {
@@ -142,7 +142,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.NumRejectedTaskDTO": {
+        "dto.NumRejectedTaskResponse": {
             "type": "object",
             "properties": {
                 "num_rejected_tasks": {
@@ -150,7 +150,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.TotalTimeDTO": {
+        "dto.TotalTimeResponse": {
             "type": "object",
             "properties": {
                 "total_time": {
